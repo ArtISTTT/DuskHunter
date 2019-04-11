@@ -14,14 +14,18 @@ class Duck:
         self.speed = 2
         self.dx = cos(self.degrees * pi / 180)
         self.dy = sin(self.degrees * pi / 180)
-        self.texture = arcade.load_texture("img/duck.jpg")
+        self.texture = arcade.load_texture("img/duck.png")
+        self.texture2 = arcade.load_texture("img/duck2.png")
 
     def move(self):
         self.x += self.dx * self.speed
         self.y += self.dy * self.speed
 
     def draw(self):
-        self.texture.draw(self.x, self.y, 30, 30)
+        if self.degrees >= 90 :
+            self.texture.draw(self.x, self.y, 70, 70, self.degrees - 180)
+        else:
+            self.texture2.draw(self.x, self.y, 70, 70, self.degrees)
         # arcade.draw_point(self.x, self.y, [200, 0, 0], 50)
 
 class MyGame(arcade.Window):
@@ -48,8 +52,7 @@ class MyGame(arcade.Window):
         self.duck.move()
         pass
 
-    def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
-        
+    #def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
 
 def main():
     game = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT)
