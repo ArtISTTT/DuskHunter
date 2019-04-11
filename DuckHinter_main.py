@@ -16,6 +16,7 @@ class Duck:
         self.dy = sin(self.degrees * pi / 180)
         self.texture = arcade.load_texture("img/duck.png")
         self.texture2 = arcade.load_texture("img/duck2.png")
+        self.textureGrass = arcade.load_texture("img/grass.png")
 
     def move(self):
         self.x += self.dx * self.speed
@@ -26,6 +27,8 @@ class Duck:
             self.texture.draw(self.x, self.y, 70, 70, self.degrees - 180,)
         else:
             self.texture2.draw(self.x, self.y, 70, 70, self.degrees)
+
+        self.textureGrass.draw(400, 100, 900, 200,)
         # arcade.draw_point(self.x, self.y, [200, 0, 0], 50)
 
 class MyGame(arcade.Window):
