@@ -23,7 +23,7 @@ class Duck:
 
     def draw(self):
         if self.degrees >= 90 :
-            self.texture.draw(self.x, self.y, 70, 70, self.degrees - 180)
+            self.texture.draw(self.x, self.y, 70, 70, self.degrees - 180,)
         else:
             self.texture2.draw(self.x, self.y, 70, 70, self.degrees)
         # arcade.draw_point(self.x, self.y, [200, 0, 0], 50)
