@@ -64,6 +64,7 @@ class MyGame(arcade.Window):
         self.set_mouse_visible(False)
         self.textureGrass = arcade.load_texture("img/grass.png")
         self.texturegun = arcade.load_texture("img/gun.png")
+        self.texturegun2 = arcade.load_texture("img/gun2.png")
 
     def setup(self):
         # Настроить игру здесь
@@ -76,7 +77,10 @@ class MyGame(arcade.Window):
 
         self.duck.draw()
         self.textureGrass.draw(400, 100, 900, 200)
-        self.texturegun.draw(500, 0, 500, 310, self.cross_hare.get_degree() + 237,)
+        if self.cross_hare.get_degree() >= 90:
+            self.texturegun.draw(400, -40, 500, 450, self.cross_hare.get_degree() + 232,)
+        else:
+            self.texturegun2.draw(400, -40, 500, 450, self.cross_hare.get_degree() - 45 )
         self.cross_hare.draw()
         # Здесь код рисунка
 
