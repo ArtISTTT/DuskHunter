@@ -63,7 +63,7 @@ class MyGame(arcade.Window):
         arcade.set_background_color(SCREEN_COLOR)
         self.set_mouse_visible(False)
         self.textureGrass = arcade.load_texture("img/grass.png")
-        self.texturegun = arcade.load_texture("img/guntest.png")
+        self.texturegun = arcade.load_texture("img/gun.png")
 
     def setup(self):
         # Настроить игру здесь
@@ -74,9 +74,9 @@ class MyGame(arcade.Window):
         """ Отрендерить этот экран. """
         arcade.start_render()
 
-        self.textureGrass.draw(400, 100, 900, 200)
-        self.texturegun.draw(500, 0, 500, 310, self.cross_hare.get_degree() + 240,)
         self.duck.draw()
+        self.textureGrass.draw(400, 100, 900, 200)
+        self.texturegun.draw(500, 0, 500, 310, self.cross_hare.get_degree() + 237,)
         self.cross_hare.draw()
         # Здесь код рисунка
 
