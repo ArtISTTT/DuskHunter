@@ -9,6 +9,7 @@ COOL_DOWN = 10
 LVL = "1"
 LVL_UP_COUNT = 10
 
+
 def get_distance(obj1, obj2):
     return ((obj1.x - obj2.x) ** 2 + (obj1.y - obj2.y) ** 2) ** 0.5
 
@@ -88,6 +89,7 @@ class MyGame(arcade.Window):
         arcade.set_background_color(SCREEN_COLOR)
         self.step = 0
         self.lvl = 1
+        self.LVL_UP_COUNT = 10
         self.score = 0
         self.set_mouse_visible(False)
         self.textureGrass = arcade.load_texture("img/grass.png")
@@ -140,10 +142,13 @@ class MyGame(arcade.Window):
             if duck.check_strike(self.cross_hare):
                 self.duck_list.remove(duck)
                 self.score += 1
-                if self.score >= LVL_UP_COUNT :
-                    self.lvl = (LVL_UP_COUNT*self.lvl + 10)/10
+                if self.score >= self.LVL_UP_COUNT :
+                    self.lvl = (self.LVL_UP_COUNT*self.lvl + 10)/10
+                    self.LVL_UP_COUNT += 10
+
 
                     LVL = str(self.lvl)
+
 
 
             if duck.is_out():
