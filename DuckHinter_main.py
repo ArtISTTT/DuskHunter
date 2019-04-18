@@ -6,6 +6,7 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_COLOR = arcade.color.CATALINA_BLUE
 COOL_DOWN = 10
+MAIN_STR = ""
 
 def get_distance(obj1, obj2):
     return ((obj1.x - obj2.x) ** 2 + (obj1.y - obj2.y) ** 2) ** 0.5
@@ -66,9 +67,12 @@ class Duck:
         else:
             self.texture2.draw(self.x, self.y, 70, 70, self.degrees)
 
+    def is_out(self):
+        return self.x < -10 or self.x > SCREEN_WIDTH + 10 or self.y > SCREEN_HEIGHT + 10
+
     def check_strike(self, cross):
         if cross.cool_down > 0:
-            return get_distance(self, cross) < 20
+            return get_distance(self, cross) < 30
         else:
             return False
 
@@ -83,6 +87,7 @@ class MyGame(arcade.Window):
         arcade.set_background_color(SCREEN_COLOR)
         self.step = 0
         self.lvl = 1
+        self.score = 0
         self.set_mouse_visible(False)
         self.textureGrass = arcade.load_texture("img/grass.png")
         self.texturegun = arcade.load_texture("img/gun.png")
@@ -94,6 +99,11 @@ class MyGame(arcade.Window):
         # self.duck = Duck()
         self.cross_hare = Cross_hare()
 
+    def get_info(self):
+        st = "Киличество апдейтов: {}\n".format(self.step) + \
+             "Счет: {}\n".format(self.score)
+        return st
+
     def on_draw(self):
         """ Отрендерить этот экран. """
         arcade.start_render()
@@ -101,7 +111,10 @@ class MyGame(arcade.Window):
         for duck in self.duck_list:
             duck.draw()
 
-        arcade.draw_text("Киличество апдейтов: " + str(self.step), 15, 580, arcade.color.WHITE, 10)
+        arcade.draw_text(self.get_info(), 15, 500, arcade.color.WHITE)
+
+        # arcade.draw_text(MAIN_STR, 300, 400, arcade.color.WHITE, 12, 500)
+        # print(self.score)
 
         self.textureGrass.draw(400, 100, 900, 200)
         if self.cross_hare.get_degree() >= 90:
@@ -109,21 +122,25 @@ class MyGame(arcade.Window):
         else:
             self.texturegun2.draw(400, -40, 500, 450, self.cross_hare.get_degree() - 45 )
         self.cross_hare.draw()
-        # Здесь код рисунка
 
+        # Здесь код рисунка
 
     def update(self, delta_time):
         """ Здесь вся игровая логика и логика перемещения."""
         self.step += 1
         self.cross_hare.update()
-        if random.randint(1, 1000) < self.lvl+5:
+        if random.randint(1, 1000) < self.lvl + 5:
             self.duck_list.append(Duck())
 
         for duck in self.duck_list:
             duck.move()
             if duck.check_strike(self.cross_hare):
                 self.duck_list.remove(duck)
+                self.score += 1
 
+            if duck.is_out():
+                self.duck_list.remove(duck)
+                self.score -= 1
         pass
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
