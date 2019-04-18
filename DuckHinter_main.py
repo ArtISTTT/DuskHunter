@@ -91,6 +91,7 @@ class MyGame(arcade.Window):
         self.cross_hare.draw()
         # Здесь код рисунка
 
+
     def update(self, delta_time):
         """ Здесь вся игровая логика и логика перемещения."""
         self.step += 1
