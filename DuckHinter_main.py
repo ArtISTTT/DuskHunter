@@ -33,7 +33,7 @@ class Duck:
     def __init__(self):
         self.x = random.randint(0, SCREEN_WIDTH)
         self.y = 50
-        self.degrees = random.randint(30, 150)
+        self.degrees = random.randint(45, 135)
         self.speed = 2
         self.dx = cos(self.degrees * pi / 180)
         self.dy = sin(self.degrees * pi / 180)
@@ -61,21 +61,28 @@ class MyGame(arcade.Window):
         super().__init__(width, height)
 
         arcade.set_background_color(SCREEN_COLOR)
+        self.step = 0
+        self.lvl = 1
         self.set_mouse_visible(False)
         self.textureGrass = arcade.load_texture("img/grass.png")
         self.texturegun = arcade.load_texture("img/gun.png")
         self.texturegun2 = arcade.load_texture("img/gun2.png")
+        self.duck_list = []
 
     def setup(self):
         # Настроить игру здесь
-        self.duck = Duck()
+        # self.duck = Duck()
         self.cross_hare = Cross_hare()
 
     def on_draw(self):
         """ Отрендерить этот экран. """
         arcade.start_render()
 
-        self.duck.draw()
+        for duck in self.duck_list:
+            duck.draw()
+
+        arcade.draw_text(str(self.step), 50, 200, arcade.color.BLACK, 10)
+
         self.textureGrass.draw(400, 100, 900, 200)
         if self.cross_hare.get_degree() >= 90:
             self.texturegun.draw(400, -40, 500, 450, self.cross_hare.get_degree() + 232,)
@@ -86,7 +93,12 @@ class MyGame(arcade.Window):
 
     def update(self, delta_time):
         """ Здесь вся игровая логика и логика перемещения."""
-        self.duck.move()
+        self.step += 1
+        if random.randint(1, 1000) < self.lvl+5:
+            self.duck_list.append(Duck())
+
+        for duck in self.duck_list:
+            duck.move()
         pass
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
