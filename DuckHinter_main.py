@@ -6,7 +6,8 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_COLOR = arcade.color.CATALINA_BLUE
 COOL_DOWN = 10
-MAIN_STR = ""
+LVL = "1"
+LVL_UP_COUNT = 10
 
 def get_distance(obj1, obj2):
     return ((obj1.x - obj2.x) ** 2 + (obj1.y - obj2.y) ** 2) ** 0.5
@@ -22,7 +23,7 @@ class Cross_hare:
        #arcade.draw_point(self.x, self.y, [0, 200, 200], 10)
         self.texturecrosshair.draw(self.x, self.y, 30, 30)
         if self.cool_down > 0:
-            arcade.draw_point(self.x, self.y,[200, 0, 0], 20)
+            arcade.draw_point(self.x+1, self.y+1,[200, 0, 0], 10)
 
         # arcade.draw_text(str(self.get_degree()), self.x + 5, self.y + 5,[200, 0, 0], 14)
 
@@ -47,7 +48,7 @@ class Cross_hare:
 
 class Duck:
     def __init__(self):
-        self.x = random.randint(0, SCREEN_WIDTH)
+        self.x = random.randint(70, SCREEN_WIDTH-70)
         self.y = 50
         self.degrees = random.randint(45, 135)
         self.speed = 2
@@ -116,6 +117,8 @@ class MyGame(arcade.Window):
         # arcade.draw_text(MAIN_STR, 300, 400, arcade.color.WHITE, 12, 500)
         # print(self.score)
 
+        arcade.draw_text("Уровень: "+str(int(self.lvl)), 15, 445, arcade.color.WHITE)
+
         self.textureGrass.draw(400, 100, 900, 200)
         if self.cross_hare.get_degree() >= 90:
             self.texturegun.draw(400, -40, 500, 450, self.cross_hare.get_degree() + 232,)
@@ -137,10 +140,17 @@ class MyGame(arcade.Window):
             if duck.check_strike(self.cross_hare):
                 self.duck_list.remove(duck)
                 self.score += 1
+                if self.score >= LVL_UP_COUNT :
+                    self.lvl = (LVL_UP_COUNT*self.lvl + 10)/10
+
+                    LVL = str(self.lvl)
+
 
             if duck.is_out():
                 self.duck_list.remove(duck)
                 self.score -= 1
+
+
         pass
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
