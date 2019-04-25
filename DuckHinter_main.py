@@ -50,6 +50,7 @@ class Dog:
         self.x = 70
         self.y = 133
         self.dog = arcade.load_texture("img/dog.gif")
+
     def draw(self):
         self.dog.draw(self.x, self.y, 210, 210)
 
@@ -66,7 +67,6 @@ class Duck:
         self.dy = sin(self.degrees * pi / 180)
         self.texture = arcade.load_texture("img/duck.png")
         self.texture2 = arcade.load_texture("img/duck2.png")
-
 
     def move(self):
         self.x += self.dx * self.speed
@@ -109,6 +109,7 @@ class MyGame(arcade.Window):
     def setup(self):
         # Настроить игру здесь
         # self.duck = Duck()
+        self.dog = Dog()
         self.cross_hare = Cross_hare()
 
     def get_info(self):
@@ -122,6 +123,8 @@ class MyGame(arcade.Window):
 
         for duck in self.duck_list:
             duck.draw()
+
+        self.dog.draw()
 
         arcade.draw_text(self.get_info(), 15, 500, arcade.color.WHITE)
 
@@ -145,6 +148,8 @@ class MyGame(arcade.Window):
         self.cross_hare.update()
         if random.randint(1, 1000) < self.lvl + 5:
             self.duck_list.append(Duck())
+
+        self.dog.move()
 
         for duck in self.duck_list:
             duck.move()
