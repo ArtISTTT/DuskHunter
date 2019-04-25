@@ -18,6 +18,7 @@ class Cross_hare:
         self.x = 0
         self.y = 0
 
+
         self.cool_down = 0
         self.texturecrosshair = arcade.load_texture("img/crosshair.png")
 
