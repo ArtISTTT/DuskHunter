@@ -17,6 +17,7 @@ class Cross_hare:
     def __init__(self):
         self.x = 0
         self.y = 0
+
         self.cool_down = 0
         self.texturecrosshair = arcade.load_texture("img/crosshair.png")
 
