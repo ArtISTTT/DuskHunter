@@ -143,12 +143,13 @@ class MyGame(arcade.Window):
         # Здесь код рисунка
 
     def update(self, delta_time):
+        self.ent = 0
         """ Здесь вся игровая логика и логика перемещения."""
         self.step += 1
         self.cross_hare.update()
-        if random.randint(1, 1000) < self.lvl + 5:
+        if (random.randint(1, 1000) < self.lvl + 25) and (self.ent!=10) :
             self.duck_list.append(Duck())
-
+            self.ent += 1
         self.dog.move()
 
         for duck in self.duck_list:
@@ -157,19 +158,18 @@ class MyGame(arcade.Window):
                 self.duck_list.remove(duck)
                 self.score += 1
                 if self.score >= self.LVL_UP_COUNT :
-                    self.lvl = (self.LVL_UP_COUNT*self.lvl + 10)/10
                     self.LVL_UP_COUNT += 10
+                    self.lvl = (self.LVL_UP_COUNT)/10
 
-
-                    LVL = str(self.lvl)
 
 
 
             if duck.is_out():
                 self.duck_list.remove(duck)
                 self.score -= 1
+                self.ent += 1
 
-
+        LVL = str(self.lvl)
         pass
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
