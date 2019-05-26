@@ -1,6 +1,7 @@
 import random
 import arcade
 from math import pi, sin, cos, acos
+from time import sleep
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -111,6 +112,9 @@ class MyGame(arcade.Window):
         # self.duck = Duck()
         self.dog = Dog()
         self.cross_hare = Cross_hare()
+        # 'run', 'game over', 'pause', 'next level'
+        self.pause_time = 180
+        self.state = 'run'
 
     def get_info(self):
         st = "Киличество апдейтов: {}\n".format(self.step) + \
@@ -120,25 +124,33 @@ class MyGame(arcade.Window):
     def on_draw(self):
         """ Отрендерить этот экран. """
         arcade.start_render()
+        if self.state in ['run', 'game over']:
+            for duck in self.duck_list:
+                duck.draw()
 
-        for duck in self.duck_list:
-            duck.draw()
+            self.dog.draw()
 
-        self.dog.draw()
+            arcade.draw_text(self.get_info(), 15, 500, arcade.color.WHITE)
 
-        arcade.draw_text(self.get_info(), 15, 500, arcade.color.WHITE)
+            # arcade.draw_text(MAIN_STR, 300, 400, arcade.color.WHITE, 12, 500)
+            # print(self.score)
 
-        # arcade.draw_text(MAIN_STR, 300, 400, arcade.color.WHITE, 12, 500)
-        # print(self.score)
+            arcade.draw_text("Уровень: "+str(int(self.lvl)), 15, 445, arcade.color.WHITE)
 
-        arcade.draw_text("Уровень: "+str(int(self.lvl)), 15, 445, arcade.color.WHITE)
+            self.textureGrass.draw(400, 100, 900, 200)
+            if self.cross_hare.get_degree() >= 90:
+                self.texturegun.draw(400, -40, 500, 450, self.cross_hare.get_degree() + 232,)
+            else:
+                self.texturegun2.draw(400, -40, 500, 450, self.cross_hare.get_degree() - 45 )
+            self.cross_hare.draw()
+        elif self.state == 'game over':
+            pass
+        elif self.state == 'next level':
+            arcade.draw_text('Вы перещли на уровень ' + str(int(self.lvl)), 250, 300, arcade.color.AIR_FORCE_BLUE, 25)
+            self.textureGrass.draw(400, 100, 900, 200)
 
-        self.textureGrass.draw(400, 100, 900, 200)
-        if self.cross_hare.get_degree() >= 90:
-            self.texturegun.draw(400, -40, 500, 450, self.cross_hare.get_degree() + 232,)
-        else:
-            self.texturegun2.draw(400, -40, 500, 450, self.cross_hare.get_degree() - 45 )
-        self.cross_hare.draw()
+
+
 
         # Здесь код рисунка
 
@@ -146,31 +158,38 @@ class MyGame(arcade.Window):
         self.ent = 0
         """ Здесь вся игровая логика и логика перемещения."""
         self.step += 1
-        self.cross_hare.update()
-        if (random.randint(1, 1000) < self.lvl + 25) and (self.ent!=10) :
-            self.duck_list.append(Duck())
-            self.ent += 1
-        self.dog.move()
-
-        for duck in self.duck_list:
-            duck.move()
-            if duck.check_strike(self.cross_hare):
-                self.duck_list.remove(duck)
-                self.score += 1
-                if self.score >= self.LVL_UP_COUNT :
-                    self.LVL_UP_COUNT += 10
-                    self.lvl = (self.LVL_UP_COUNT)/10
-
-
-
-
-            if duck.is_out():
-                self.duck_list.remove(duck)
-                self.score -= 1
+        if self.state == 'run':
+            self.cross_hare.update()
+            if (random.randint(1, 1000) < self.lvl+25) and (self.ent!=10) :
+                self.duck_list.append(Duck())
                 self.ent += 1
+            self.dog.move()
 
-        LVL = str(self.lvl)
-        pass
+            for duck in self.duck_list:
+                duck.move()
+                if duck.check_strike(self.cross_hare):
+                    self.duck_list.remove(duck)
+                    self.score += 1
+                    if self.score >= self.LVL_UP_COUNT :
+                        self.state = 'next level'
+                        self.pause_time = 180
+
+                        self.LVL_UP_COUNT += 10
+                        self.lvl = (self.LVL_UP_COUNT)/10
+
+                        for duck in self.duck_list:
+                            self.duck_list.remove(duck)
+                if duck.is_out():
+                    self.duck_list.remove(duck)
+                    self.score -= 1
+                    self.ent += 1
+
+
+        elif self.state == 'next level':
+            self.pause_time -= 1
+            if self.pause_time <= 0:
+                self.state = 'run'
+
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         self.cross_hare.move_to(x, y)
