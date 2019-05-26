@@ -146,7 +146,7 @@ class MyGame(arcade.Window):
         elif self.state == 'game over':
             pass
         elif self.state == 'next level':
-            arcade.draw_text('Вы перещли на уровень ' + str(int(self.lvl)), 250, 300, arcade.color.AIR_FORCE_BLUE, 25)
+            arcade.draw_text('Вы перешли на уровень ' + str(int(self.lvl))+' !', 250, 300, arcade.color.AIR_FORCE_BLUE, 25)
             self.textureGrass.draw(400, 100, 900, 200)
 
 
